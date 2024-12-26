@@ -1,0 +1,135 @@
+```java
+import java.io.PrintStream;
+import java.util.Objects;
+import java.util.Scanner;
+public class Main {
+    public static Scanner in = new Scanner(System.in); //чтение с клавиатуры
+    public static PrintStream out = System.out; //вывод
+    public static void main(String[] args) {
+        Knigi knlist=new Knigi(); //создание объекта
+        int n=4; //кол-во книг в списке
+        knlist.addboks("Так говорил Заратустра"); //добавление книг в массив
+        knlist.addboks("Война и мир");
+        knlist.addboks("Тошнота");
+        knlist.addboks("Человеческое, слишком человеческое");
+        knlist.addstr(389); //добавление кол-ва страниц в массив
+        knlist.addstr(1235);
+        knlist.addstr(252);
+        knlist.addstr(470);
+        knlist.addavt("Фридрих Ницше"); //добавление авторов в массив
+        knlist.addavt("Лев Толстой");
+        knlist.addavt("Жан Поль Сартр");
+        knlist.addavt("Фридрих Ницше");
+        System.out.println(knlist.limit(n)); //проверка на ограничение
+        knlist.outKn(); //вывод пронумерованного списка книг, страниц и авторов
+        System.out.println("Кол-во книг ук. автора "+knlist.countkn("Франц Кафка"));
+        System.out.println("Кол-во стр. ук. автора "+knlist.countstr("Фридрих Ницше"));
+        knlist.arrayavt(); //вывод массива авторов
+        System.out.println("Среднее кол-во стр. "+knlist.srstr());
+        System.out.println("Среднее кол-во стр. ук. автора "+knlist.srvol("Жан Поль Сартр"));
+        System.out.println("Автор с макс. кол-вом стр. "+knlist.maxstr());
+        System.out.println("Автор с макс. кол-вом книг "+knlist.maxkn());
+        System.out.println("Проверка гипотезы "+knlist.gipot());
+    }
+}
+class Knigi {//создание списка
+    int n=4;//кол-во книг в списке
+    public String name; //создание поля
+    String [] boks=new String[n]; //массив для названия книг
+    int i=0;
+    public void addboks(String kn) { //заполнение массива книгами
+        boks[i]=kn;
+        i=i+1;
+    }
+    String [] avt=new String[n]; //массив для авторов
+    int i1=0;
+    public void addavt(String navt) {//заполнение массива авторами
+        avt[i1]=navt;
+        i1=i1+1;
+    }
+    int [] str=new int[n];//создание массива с кол-вом страниц
+    int i2=0;
+    public void addstr(int kstr) {//заполнение массива страниц
+        str[i2]=kstr;
+        i2=i2+1;
+    }
+    public String getName() {//геттер
+        return name;
+    }
+    @Override //переопределение вывода
+    public String toString() {
+        return name;
+    }
+    public void outKn() { //вывод пронумерованного списка книг
+        for(int i=0;i<n;i++) {
+            System.out.println((i+1)+"."+avt[i]+"'"+boks[i]+"'. Объём:"+str[i]);
+        }
+    }
+    public String limit(int n) { //проверка на ограничение
+        if (n>10) //книг должно быть не больше 9
+            return "Слишком много книг";
+        return "Список книг";
+    }
+    public int countkn(String avtor) { //кол-во книг указанного автора
+        int kl=0;
+        for (int i=0;i<n;i++) {
+            if(avt[i].equals(avtor))
+                kl=kl+1;
+        }
+        return kl;
+    }
+    public int countstr(String navt2) {//кол-во страниц указанного автора
+        int res1=0;
+        for(int i=0;i<n;i++) {
+            if(avt[i].equals(navt2))
+                res1=res1+str[i];
+        }
+        return res1;
+    }
+    public void arrayavt() { //список авторов с кол-вом книг и страниц
+        for(int i=0;i<n;i++) {
+            System.out.println("Автор:"+avt[i]+". Количество книг:"+countkn(avt[i])+". Объём страниц: "+countstr(avt[i])+".");
+        }
+    }
+    public int srstr() { //среднее кол-во страниц в массиве
+        int sr=0;
+        int kol=0;
+        for (int i=0;i<n;i++) {
+            sr=sr+str[i];
+            kol=kol+1;
+        }
+        return (int)(sr/kol);
+    }
+    public int srvol(String navt3) {//средний объем страниц в книгах указанного автора
+        return (int)(countstr(navt3)/countkn(navt3));
+    }
+    public String maxstr() { //автор, написавший максимальное число страниц
+        int max=-1;
+        String res="";
+        for (int i=0;i<n;i++) {
+            if (countstr(avt[i])>max) {
+                res=avt[i];
+                max=countstr(avt[i]);
+            }
+        }
+        return res;
+    }
+    public String maxkn() {//автор, написавший максимальное число книг
+        int max=-1;
+        String otv="";
+        for (int i=0;i<n;i++) {
+            if (countkn(avt[i])>=max) {
+                max=countkn(avt[i]);
+                otv=avt[i];
+            }
+        }
+        return otv;
+    }
+    public boolean gipot() {//верно ли,что автор, написавший макс. число стпаниц и
+        if (maxkn()==maxstr())//макс. число книг, один и тот же?
+            return true;
+        else
+            return false;
+    }
+}
+```
